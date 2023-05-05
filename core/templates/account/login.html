@@ -1,0 +1,92 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+
+{% block content %}
+
+<div class="max-w-lg mx-auto flex flex-wrap p-6">
+<div class="w-full bg-gray-100 p-6 rounded-xl"> 
+  <h1 class="mb-6 text-2xl">Log in</h1>
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  <div>
+    <label for="id_login">Email</label>
+    <input type="email" name="login" placeholder="E-mail" class="w-full mt-2 py-4 px-6 bg-white rounded-xl" autocomplete="email" required id="id_login">
+  </div>
+
+  <div class="pt-3 pb-3">
+    <label for="id_password">Password</label>
+    <input type="password" name="password" placeholder="Password" class="w-full mt-2 py-4 px-6 bg-white rounded-xl" autocomplete="current-password" required id="id_password">
+  </div>
+
+  <div>
+  <a class="float-left pt-3 pb-5"href="{% url 'account_reset_password' %}">Forgot Password?</a>
+  <a class="float-right pt-3 pb-5" href="{% url 'account_signup' %}">Sign Up</a>
+  </div>
+
+  <div class="pt-3">
+    <button class="py-4 px-6 rounded-xl text-white bg-purple-500 hover:bg-purple-700 w-full" type="submit">{% trans "Sign In" %}</button>
+  </div>
+
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+          <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
+            <span class="text-xl inline-block mr-5 align-middle">
+              <i class="fas fa-bell"></i>
+            </span>
+            <span class="inline-block align-middle mr-8">
+              <b class="capitalize">Error!</b> {{ error|escape }}
+            </span>
+            <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+              <span>×</span>
+          
+            </button>
+          </div>
+      {% endfor %}
+  {% endfor %}
+
+  {% for error in form.non_field_errors %}
+  <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
+    <span class="text-xl inline-block mr-5 align-middle">
+      <i class="fas fa-bell"></i>
+    </span>
+    <span class="inline-block align-middle mr-8">
+      <b class="capitalize">Error!</b> {{ error|escape }}
+    </span>
+    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+      <span>×</span>
+  
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <script>
+    function closeAlert(event){
+      let element = event.target;
+      while(element.nodeName !== "BUTTON"){
+        element = element.parentNode;
+      }
+      element.parentNode.parentNode.removeChild(element.parentNode);
+    }
+  </script>
+
+  <div class="pt-3">
+  <a href="/accounts/facebook/login/?process=login">
+    <button type="button" class=" w-full rounded-xl text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium text-sm px-6 py-4 text-center items-center dark:focus:ring-[#3b5998]/55 mr-2 mb-2">
+      <svg class="w-4 h-4 mr-2 -ml-1 items-center text-center inline-flex" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M279.1 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.4 0 225.4 0c-73.22 0-121.1 44.38-121.1 124.7v70.62H22.89V288h81.39v224h100.2V288z"></path></svg>
+      Sign in with Facebook
+    </button>
+  </a>
+</div>
+
+</form>
+
+</div>
+</div>
+
+{% endblock %}

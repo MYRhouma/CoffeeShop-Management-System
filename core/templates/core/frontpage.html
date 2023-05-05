@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="mx-auto px-4 py-32 lg:flex lg:items-center">
+    <div class="mx-auto max-w-xl text-center">
+        <img src="{% static 'images/coffee-cup.png' %}"/>
+  
+        <p class="lorem-ipsum mt-4 text-2xl">
+            Start your day right with our crafted products, <br>
+            made to perfection and served with a smile.
+        </p>
+        
+        {% if user.is_authenticated %}
+        <div class="mt-8 flex flex-wrap justify-center sm:text-xl sm:leading-relaxedgap-4">
+            <a class="shop-text block w-full 
+                rounded-xl 
+                bg-purple-500 
+                px-12 py-3 
+                text-sm 
+                font-medium 
+                text-white 
+                shadow 
+                hover:bg-purple-700 
+                focus:outline-none 
+                focus:ring 
+                active:bg-red-500 
+                sm:w-auto"
+                href="{% url 'shop' %}">Start Shopping</a>
+        </div>
+        {% else %}
+        <div class="mt-8 flex flex-wrap justify-center sm:text-xl sm:leading-relaxedgap-4">
+            <a class="shop-text block w-full 
+                rounded-xl 
+                bg-purple-500 
+                px-12 py-3 
+                text-sm 
+                font-medium 
+                text-white 
+                shadow 
+                hover:bg-purple-700 
+                focus:outline-none 
+                focus:ring 
+                active:bg-red-500 
+                sm:w-auto"
+                href="{% url 'account_login' %}">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

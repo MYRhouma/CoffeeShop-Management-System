@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>Scanner un QR code</title>
+    <!-- Inclure la bibliothèque instascan -->
+    <script type="text/javascript" src="{% static 'js/instascan.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <!-- Afficher la vidéo du scanner -->
+    <video id="preview"></video>
+    <!-- Afficher le résultat de la lecture du QR code -->
+    <h1 id="result"></h1>
+
+    <!-- Ajouter un script pour initialiser le scanner -->
+    <script type="text/javascript">
+      // Obtenir la référence à la vidéo de prévisualisation
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+      // Ajouter un événement de détection du QR code
+      scanner.addListener('scan', function (content) {
+        // Afficher le résultat de la lecture du QR code
+        document.getElementById('result').textContent = content;
+        scanner.stop();
+      });
+
+      // Démarrer le scanner
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('Pas de caméra disponible.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+  </body>
+</html>

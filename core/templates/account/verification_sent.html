@@ -1,0 +1,27 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+{% load static %}
+
+<div class="flex flex-wrap justify-center">
+    <img
+      src="{% static 'images/signup_ok.png' %}"
+      class="max-w-sm rounded border p-1 dark:border-neutral-700 dark:bg-neutral-800"
+      alt="..." />
+</div>
+
+<div class="mx-auto flex lg:items-center">
+  <div class="mx-auto max-w-xl text-center">
+
+    <div class="flex p-2 bg-green-200 text-green-800 p-4 text-sm rounded border border-green-300 my-3">
+        <div class="flex-shrink mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <div class="flex-grow">We have sent an e-mail to you. Follow<br> the link provided to finalize the signup process.</div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

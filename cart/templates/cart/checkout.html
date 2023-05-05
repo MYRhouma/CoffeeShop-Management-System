@@ -1,0 +1,188 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div class="max-w-6xl mx-auto flex flex-wrap items-start py-6 px-6 xl:px-0">
+    <div class="product w-full lg:w-3/4">
+        <h1 class="shop-text mb-5 text-3xl">Checkout</h1>
+
+            <div class="w-full md:pr-6">
+                <div class="mb-6 p-6 bg-gray-100 rounded-xl" style="display: none;color:red;" id="errors"></div>
+
+                <div class="mb-6 p-6 bg-gray-100 rounded-xl">
+                        <h2 class="shop-text mb-5 uppercase text-lg">
+                        Table Selection : Scan the Table's QR Code
+                    </h2>
+                    <center><button id="ScanTableButton" class="shop-text inline-block px-8 py-4 rounded-xl bg-purple-500 hover:bg-purple-700 text-white" style="margin:auto;" onclick="ScanCode()">Scan Table's QR Code</button></center>
+                    <video id="preview" style="border-radius: 20px;margin:auto;display: none"  width="320" height="320"></video>
+                    <!-- Afficher le résultat de la lecture du QR code -->
+                    <h1 id="result" style="text-align: center;"></h1>
+                    <input type="hidden" name="table_number" value="35" id="table_number">
+            <script type="text/javascript" src="{% static 'js/instascan.min.js' %}"></script>
+            <script type="text/javascript">
+              // Obtenir la référence à la vidéo de prévisualisation
+              let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+              // Ajouter un événement de détection du QR code
+              scanner.addListener('scan', function (content) {
+                // Afficher le résultat de la lecture du QR code
+                document.getElementById('result').textContent = "Table : "+ content;
+                document.getElementById('preview').style.display="none";
+                document.getElementById('table_number').value=content;
+                scanner.stop();
+              });
+                function ScanCode(){
+                    document.getElementById('ScanTableButton').style.display="none";
+                    document.getElementById('preview').style.display="block";
+                     // Démarrer le scanner
+                      Instascan.Camera.getCameras().then(function (cameras) {
+                        if (cameras.length > 0) {
+                          scanner.start(cameras[0]);
+                        } else {
+                          console.error('Pas de caméra disponible.');
+                        }
+                      }).catch(function (e) {
+                        console.error(e);
+                      });
+                }
+
+            </script>
+
+                </div>
+
+                <div class="mb-6 p-6 bg-gray-100 rounded-xl">
+                    <h2 class="shop-text mb-5 uppercase text-lg">
+                        Contact Information
+                    </h2>
+                    <div class="mb-4">
+                        <label class="inline-block mb-2">First name</label>
+                        <input name="first_name" type="text" class="w-full p-5 rounded-xl" value="{{ request.user.first_name }}">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="inline-block mb-2">Phone</label>
+                        <input name="phone" type="phone" class="w-full p-5 rounded-xl">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="inline-block mb-2">Email</label>
+                        <input name="email" type="email" class="w-full p-5 rounded-xl" value="{{ request.user.email }}">
+                    </div>
+
+                </div>
+
+            </div>
+    </div>
+    <div class="summary w-full md:w-1/4 p-6 bg-gray-100 rounded-xl mt-3">
+        <h2 class="shop-text uppercase text-lg mb-5">Summary</h2>
+
+        <div class="mb-6 flex justify-between">
+            <span class="font-semibold">Total</span>
+            <span>{{ cart.get_total_cost }} DT</span>
+        </div>
+
+        <button
+            onclick="buy(event)"
+            class="shop-text inline-block px-8 py-4 rounded-xl bg-purple-500 hover:bg-purple-700 text-white"
+        >
+            Confirm checkout
+        </button>
+
+    </div>
+
+</div>
+    <H1 id="TT"></H1>
+{% endblock %}
+
+{% block scripts %}
+{#<script type="application/javascript" src="https://js.stripe.com/v3/"></script>#}
+<script>
+    let el = document.getElementById('errors')
+
+    function validateForm(data) {
+        let errors = []
+
+        if (data.first_name === '') {
+            errors.push('First name is empty')
+        }
+        if (data.email === '') {
+            errors.push('Email is empty')
+        }
+        if (data.phone === '') {
+            errors.push('Phone is empty')
+        }
+
+
+        if (data.table_number === '') {
+            errors.push('Please Scan Table QR Code !')
+        }
+
+        if(errors.length > 0) {
+            let html = '<ul>';
+
+            errors.forEach((error) => {
+                html += '<li>' + error + '</li>';
+            })
+
+            el.innerHTML = html + '</ul>';
+        } else {
+            el.innerHTML = '';
+        }
+        if(errors){
+            el.style.display="block";
+        }else{
+            el.style.display="none";
+        }
+        return errors
+    }
+
+    function buy(event) {
+        event.preventDefault()
+
+        let data = {
+            'table_number': document.querySelector('input[name=table_number]').value,
+            'first_name': document.querySelector('input[name=first_name]').value,
+            'phone': document.querySelector('input[name=phone]').value,
+            'email': document.querySelector('input[name=email]').value,
+        }
+
+        let errors = validateForm(data)
+
+        if (errors.length) {
+            console.log('Errors', errors)
+        } else {
+            document.getElementById('errors').style.display="none";
+            // SOMETHING HAVE TO HAPPEN HERE SO THE PURCHASE CONTINUES en cours
+            console.log(data);
+
+            {#$.ajax({#}
+			{#		url: '/order/start_order/',#}
+			{#		type: 'GET',#}
+			{#		success: function(response) {#}
+			{#			$('#TT').html("C BON !");#}
+			{#		},#}
+			{#		error: function() {#}
+			{#			alert('Error: Failed to load data.');#}
+			{#		}#}
+			{#	});#}
+            fetch('/order/start_order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(data)
+            }).then(function(response) {
+                console.log(response.json())
+                return response.json()
+            })
+        }
+
+        return false
+    }
+</script>
+{% endblock %}

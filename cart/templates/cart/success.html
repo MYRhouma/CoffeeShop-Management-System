@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% block title %}Success{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="flex flex-wrap justify-center pt-5">
+    <img
+        src="{% static 'images/khob-khun-ka.png' %}"
+        class="max-w-sm rounded border p-1 dark:border-purple-700"
+        alt="..." />
+</div>
+
+<div class="mx-auto flex lg:items-center">
+    <div class="mx-auto max-w-xl text-center mt-3">    
+        <div class="flex-grow shop-text text-semibold text-purple-500">Khob Khun Ka.</div>
+    </div>
+</div>
+{% endblock %}

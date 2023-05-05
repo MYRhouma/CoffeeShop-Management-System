@@ -1,0 +1,148 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- Container for demo purpose -->
+<div class="container my-24 px-6 mx-auto">
+
+<!-- Section: Design Block -->
+<section class="mb-32 text-gray-800 text-center">
+    <style>
+        .map-container {
+        height: 700px;
+        z-index: -1;
+    }
+    </style>
+    <div class="px-6 py-12 md:px-12">
+        <div class="container mx-auto xl:px-32">
+            <div class="grid lg:grid-cols-2 flex items-center">
+                <div class="md:mt-12 lg:mt-0 mb-12 lg:mb-0">
+                    <div
+                        class="block rounded-lg shadow-lg px-6 py-12 md:px-12 lg:-mr-14"
+                        style="background: hsla(0, 0%, 100%, 0.55); backdrop-filter: blur(30px)"
+                    >
+                <h2 class="shop-text text-3xl font-bold mb-12">Contact us</h2>
+                <form method='POST'>
+                    {% csrf_token %}
+                    <div class="form-group mb-6">
+                        <input
+                            type="text"
+                            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
+                            id="exampleInput7"
+                            placeholder="Name"
+                            name='name'
+                        />
+                    </div>
+
+                    <div class="form-group mb-6">
+                        <input
+                            type="email"
+                            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
+                            id="exampleInput8"
+                            placeholder="Email address"
+                            name='email'
+                        />
+                    </div>
+                
+                    <div class="form-group mb-6">
+                        <textarea
+                            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
+                            id="exampleFormControlTextarea13"
+                            rows="3"
+                            placeholder="Message"
+                            name="message"
+                        >
+                        </textarea>
+                    </div>
+
+                    {% if messages %}
+                        <ul class="messages">
+                    {% for message in messages %}
+                        <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-green-500">
+                            <span class="text-xl inline-block mr-5 align-middle">
+                                <i class="fas fa-bell"></i>
+                            </span>
+                            
+                            <span class="inline-block align-middle mr-8">
+                                <b class="capitalize">OK!</b> {{ message|escape }}
+                            </span>
+                            
+                            <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+                                <span>×</span>
+                            </button>
+                        </div>    
+                    {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if form.errors %}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
+                        <span class="text-xl inline-block mr-5 align-middle">
+                            <i class="fas fa-bell"></i>
+                        </span>
+            
+                        <span class="inline-block align-middle mr-8">
+                            <b class="capitalize">Error!</b> {{ error|escape }}
+                        </span>
+                        
+                        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+
+                    {% for error in form.non_field_errors %}
+                    <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
+                        <span class="text-xl inline-block mr-5 align-middle">
+                            <i class="fas fa-bell"></i>
+                        </span>
+                        
+                        <span class="inline-block align-middle mr-8">
+                            <b class="capitalize">Error!</b> {{ error|escape }}
+                        </span>
+                        
+                        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <script>
+                        function closeAlert(event){
+                            let element = event.target;
+                            while(element.nodeName !== "BUTTON"){
+                                element = element.parentNode;
+                            }
+                            element.parentNode.parentNode.removeChild(element.parentNode);
+                        }
+                    </script>
+                
+                    <button
+                        type="submit"
+                        class="shop-text w-full px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-800 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                    >
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+            <div class="md:mb-12 lg:mb-0">
+                <div class="map-container relative shadow-lg rounded-lg">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.8646786725058!2d10.197794999999998!3d36.8457168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd350d353d159f%3A0xcbe17baf88306d1f!2zUHLDqnQgw6AgbWFuZ2VyIENVTg!5e0!3m2!1sfr!2stn!4v1683244480109!5m2!1sfr!2stn" class="left-0 top-0 h-full w-full absolute rounded-lg" frameborder="0" allowfullscreen></iframe>
+{#                    <iframe src="" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>#}
+                </div>
+            </div>
+    </div>
+</div>
+</div>
+</section>
+    <!-- Section: Design Block -->
+</div>
+<!-- Container for demo purpose -->
+
+{% endblock %}
