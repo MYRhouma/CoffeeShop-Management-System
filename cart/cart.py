@@ -8,10 +8,12 @@ class Cart(object):
         cart = self.session.get(settings.CART_SESSION_ID)
 
         if not cart:
-            cart = self.session[settings.CART_SESSION_ID] = {}
+            cart = self.session[settings.CART_SESSION_ID] = {'cart': {},
+                                                             'discount':0.0}
 
-        self.cart = cart
-    
+        self.cart = cart['cart']
+        self.discount = cart['discount']
+
     def __iter__(self):
         for p in self.cart.keys():
             self.cart[str(p)]['product'] = Product.objects.get(pk=p)
@@ -19,12 +21,14 @@ class Cart(object):
         for item in self.cart.values():
             item['total_price'] = float(item['product'].price * item['quantity'])
             yield item
+
     
     def __len__ (self):
         return sum(item['quantity'] for item in self.cart.values())
 
     def save(self):
-        self.session[settings.CART_SESSION_ID] = self.cart
+        self.session[settings.CART_SESSION_ID]['cart'] = self.cart
+        self.session[settings.CART_SESSION_ID]['discount'] = self.discount
         self.session.modified = True
     
     def add(self, product_id, quantity=1, update_quantity=False):
@@ -43,7 +47,6 @@ class Cart(object):
         self.save()
     
     def remove(self, product_id):
-        print(str(product_id) in self.cart)
         if str(product_id) in self.cart:
             del self.cart[str(product_id)   ]
             self.save()
@@ -63,3 +66,6 @@ class Cart(object):
             return self.cart[str(product_id)]
         else:
             return None
+    def set_discount(self, value):
+        self.discount=float(value)
+        self.save()

@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from .forms import CartAddProductForm
 from django.http import JsonResponse
 
-# @require_POST
+@require_POST
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product,id=product_id)
@@ -18,19 +18,36 @@ def cart_add(request, product_id):
         cd=form.cleaned_data
         cart.add(product_id=product_id,quantity=cd['quantity'],update_quantity=cd['override'])
     return redirect('cart:cart_detail')
-# @require_POST
+@require_POST
 def cart_remove(request, product_id):
     cart = Cart(request)
     # product = get_object_or_404(Product,id=product_id)
     cart.remove(product_id)
     return redirect('cart:cart_detail')
 
+
+@require_POST
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect('cart:cart_detail')
+@require_POST
+def set_cart_discount(request):
+    cart = Cart(request)
+    discounted_amount=float(request.POST['discount-amount'])
+    if discounted_amount<0:
+        discounted_amount=0
+    elif discounted_amount>100:
+        discounted_amount=100
+    cart.set_discount(discounted_amount)
+    return redirect('cart:cart_detail')
+
 def cart_detail(request):
     cart = Cart(request)
-    # print(cart.cart)
-    form = CartAddProductForm()
-    # return render(request, 'new/index.html',{'products':products,'form':form,})
-    return JsonResponse(cart.cart)
+    return JsonResponse({
+        'discount': cart.discount,
+        'cart':cart.cart,
+    })
 
 
 # def update_cart(request, product_id, action):
