@@ -1,6 +1,8 @@
 {% extends 'pages/base.html' %}
 {% load static %}
 {% block content %}
+    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 		<!--**********************************
             Content body start
         ***********************************-->
@@ -33,7 +35,7 @@
 													<th>TOTAL($)</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody id="cart-items">
                         {% for item in cart %}
                           {% include "pages/cart_item.html" %}
                         {% endfor %}
@@ -240,21 +242,32 @@
 {#                            });#}
 {#                          }#}
 {#                        </script>#}
-              {% for p in products %}
-							<div style="cursor:pointer;"
-{#                                 onclick="add_to_cart(event, {{ p.id }})"#}
-                            class="col-xl-3 col-xxl-4 col-lg-6 col-md-12 col-sm-6">
-								<div class="card item-card">
-									<div class="card-body p-0">
-										<img src="{% static 'frontend/images/dish/2.jpg'%}" class="img-fluid" alt="">
-										<div class="info">
-											<h5 class="name">{{p.name}}</h5>
-											<h6 class="mb-0 price"><img src="{% static 'frontend/images/veg.png'%}" alt="">{{p.price}} DT</h6>
-										</div>
-									</div>
-								</div>
-							</div>
-              {% endfor %}
+
+              {% include 'pages/cart_items.html' %}
+                        <script>
+                                $(document).ready(function() {
+                                    // Lorsqu'un utilisateur clique sur le bouton "Ajouter au panier"
+                                    $('.add-to-cart').click(function(event) {
+                                        event.preventDefault();
+                                        var productId = $(this).data('product-id');
+
+                                        // Envoyer une requête AJAX à la vue add_to_cart avec le produit ID
+                                        $.ajax({
+                                            url: '/add_to_cart/' + productId + '/',
+                                            method: 'GET',
+                                            success: function(response) {
+                                                // Mettre à jour le contenu du panier dans la page HTML
+                                                $('#cart-items').html(response);
+                                                console.log("LES ITEMS");
+                                                console.log(response.products);
+                                            },
+                                            error: function(error) {
+                                                console.log(error);
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
 						</div>
 					</div>
 				</div>

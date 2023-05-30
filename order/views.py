@@ -23,7 +23,7 @@ def start_order(request):
 
         items.append({
             'price_data': {
-                'currency': 'thb',
+                'currency': 'tnd',
                 'product_data': {
                 'name': product.name,
                 },

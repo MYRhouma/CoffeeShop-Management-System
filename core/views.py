@@ -5,11 +5,22 @@ from django.contrib import messages
 from product.models import Category, Product
 from django.conf import settings
 import os
+from cart.forms import CartAddProductForm
 
 def frontpage(request):
-    # return render(request, 'core/frontpage.html')
+    list=[]
+    categories = Category.objects.all().order_by('id')
     products = Product.objects.all()
-    return render(request, 'pages/home.html',{'products':products,})
+    for cat in categories:
+        produitsFiltre=products.filter(category=cat)
+        obj={
+            "cat":cat,
+            "products":produitsFiltre,
+            "nbProduits":produitsFiltre.count(),
+        }
+        list.append(obj)
+    form = CartAddProductForm()
+    return render(request, 'new/index.html',{'products':products,'form':form,'list':list,"categories":categories,})
 
 def contact(request):
     if request.method == 'POST':

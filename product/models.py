@@ -6,7 +6,7 @@ from io import BytesIO
 class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-
+    icon = models.FileField(upload_to="uploads/categories/",null=True)
     class Meta:
         ordering = ('name',)
 
@@ -21,7 +21,7 @@ class Product(models.Model):
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/products/',default='default_dish_image/default.png', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='upload', blank=True, null=True)
 
     class Meta:
